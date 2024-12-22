@@ -8,7 +8,6 @@ from homeassistant.components.light import (
     ATTR_EFFECT,
     ATTR_EFFECT_LIST,
     ATTR_HS_COLOR,
-    ATTR_KELVIN,
     ATTR_MAX_COLOR_TEMP_KELVIN,
     ATTR_MIN_COLOR_TEMP_KELVIN,
     ATTR_RGB_COLOR,
@@ -481,7 +480,7 @@ async def test_capability_color_setting_temperature_k(
     calls = async_mock_service(hass, light.DOMAIN, SERVICE_TURN_ON)
     await cap.set_instance_state(Context(), TemperatureKInstanceActionState(value=6500))
     assert len(calls) == 1
-    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 6500}
+    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 6500}
 
 
 async def test_capability_color_setting_temprature_k_extend(
@@ -545,7 +544,7 @@ async def test_capability_color_setting_temprature_k_extend(
     calls = async_mock_service(hass, light.DOMAIN, SERVICE_TURN_ON)
     await cap_temp.set_instance_state(Context(), TemperatureKInstanceActionState(value=4500))
     assert len(calls) == 1
-    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 2000}
+    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 2000}
 
     # extend
     attributes = {
@@ -573,9 +572,9 @@ async def test_capability_color_setting_temprature_k_extend(
     for v in (1500, 6700, 7500):
         await cap_temp.set_instance_state(Context(), TemperatureKInstanceActionState(value=v))
     assert len(calls) == 3
-    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 2300}
-    assert calls[1].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 6700}
-    assert calls[2].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 6800}
+    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 2300}
+    assert calls[1].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 6700}
+    assert calls[2].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 6800}
 
 
 @pytest.mark.parametrize(
@@ -629,7 +628,7 @@ async def test_capability_color_setting_temperature_k_with_profile(
     calls = async_mock_service(hass, light.DOMAIN, SERVICE_TURN_ON)
     await cap_temp.set_instance_state(Context(), TemperatureKInstanceActionState(value=4500))
     assert len(calls) == 1
-    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 4100}
+    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 4100}
 
     state = State("light.test", STATE_OFF, dict({ATTR_COLOR_TEMP_KELVIN: 4115}, **attributes))
     cap_temp = _get_temperature_capability(hass, entry_data, state)
@@ -638,7 +637,7 @@ async def test_capability_color_setting_temperature_k_with_profile(
     calls = async_mock_service(hass, light.DOMAIN, SERVICE_TURN_ON)
     await cap_temp.set_instance_state(Context(), TemperatureKInstanceActionState(value=4100))
     assert len(calls) == 1
-    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_KELVIN: 4100}
+    assert calls[0].data == {ATTR_ENTITY_ID: state.entity_id, ATTR_COLOR_TEMP_KELVIN: 4100}
 
     state = State("light.invalid", STATE_OFF, dict({ATTR_COLOR_TEMP_KELVIN: 4115}, **attributes))
     cap_temp = _get_temperature_capability(hass, config, state)

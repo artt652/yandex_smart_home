@@ -13,7 +13,6 @@ from homeassistant.components.light import (
     ATTR_COLOR_TEMP_KELVIN,
     ATTR_EFFECT,
     ATTR_EFFECT_LIST,
-    ATTR_KELVIN,
     ATTR_RGB_COLOR,
     ATTR_RGBW_COLOR,
     ATTR_RGBWW_COLOR,
@@ -263,7 +262,7 @@ class ColorTemperatureCapability(StateCapability[TemperatureKInstanceActionState
         service_data: dict[str, Any] = {ATTR_ENTITY_ID: self.state.entity_id}
 
         if color_temp_supported(self._supported_color_modes):
-            service_data[ATTR_KELVIN] = self._converter.get_ha_color_temperature(state.value)
+            service_data[ATTR_COLOR_TEMP_KELVIN] = self._converter.get_ha_color_temperature(state.value)
 
         elif ColorMode.WHITE in self._supported_color_modes and state.value == self._default_white_temperature:
             service_data[ATTR_WHITE] = self.state.attributes.get(ATTR_BRIGHTNESS, 255)
