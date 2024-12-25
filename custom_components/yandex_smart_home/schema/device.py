@@ -34,6 +34,7 @@ class DeviceType(StrEnum):
     LIGHT_GARLAND = "devices.types.light.garland"
     SOCKET = "devices.types.socket"
     SWITCH = "devices.types.switch"
+    SWITCH_RELAY = "devices.types.switch.relay"
     THERMOSTAT = "devices.types.thermostat"
     THERMOSTAT_AC = "devices.types.thermostat.ac"
     MEDIA_DEVICE = "devices.types.media_device"
