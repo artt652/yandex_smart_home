@@ -48,15 +48,8 @@ yandex_smart_home:
           entity: sensor.deerma_jsq2w_2976_temperature
         - type: humidity
           entity: sensor.deerma_jsq2w_2976_relative_humidity
+      backlight_entity_id: light.deerma_jsq2w_2976_indicator_light
       custom_toggles:
-        backlight:
-          state_entity_id: light.deerma_jsq2w_2976_indicator_light
-          turn_on:
-            action: light.turn_on
-            entity_id: light.deerma_jsq2w_2976_indicator_light
-          turn_off:
-            action: light.turn_off
-            entity_id: light.deerma_jsq2w_2976_indicator_light
         mute:
           state_template: '{( is_state("switch.deerma_jsq2w_2976_alarm", "off") }}'
           turn_on:
@@ -73,13 +66,12 @@ yandex_smart_home:
           auto: "Level4"
       custom_modes:
         program:
-          state_entity_id: fan.deerma_jsq2w_2976_fan_level
-          state_attribute: preset_mode
+          state_entity_id: select.deerma_jsq2w_2976_fan_level
           set_mode:
-            action: fan.set_preset_mode
-            entity_id: fan.deerma_jsq2w_2976_fan_level
+            action: select.select_option
+            entity_id: select.deerma_jsq2w_2976_fan_level
             data:
-              preset_mode: "{{ mode }}"
+              option: "{{ mode }}"
 ```
 
 ## Xiaomi Mijia Pure Smart Humidifier Pro { id=xiaomi-mijia-pure-smart-humidifier-pro }
