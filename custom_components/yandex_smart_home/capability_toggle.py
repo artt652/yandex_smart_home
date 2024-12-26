@@ -16,11 +16,11 @@ from homeassistant.const import (
     SERVICE_TURN_ON,
     SERVICE_VOLUME_MUTE,
     STATE_ON,
-    STATE_PAUSED,
     STATE_PLAYING,
 )
 from homeassistant.core import Context
 
+from .backports import VacuumActivity
 from .capability import STATE_CAPABILITIES_REGISTRY, ActionOnlyCapabilityMixin, Capability, StateCapability
 from .color import SOLID_LIGHT_EFFECT, LightState
 from .const import CONF_FEATURES, MediaPlayerFeature
@@ -214,7 +214,7 @@ class PauseCapabilityVacuum(StateToggleCapability):
 
     def get_value(self) -> bool:
         """Return the current capability value."""
-        return self.state.state == STATE_PAUSED
+        return self.state.state == VacuumActivity.PAUSED
 
     async def set_instance_state(self, context: Context, state: ToggleCapabilityInstanceActionState) -> None:
         """Change the capability state."""

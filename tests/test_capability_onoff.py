@@ -51,7 +51,7 @@ from homeassistant.core import DOMAIN as HA_DOMAIN, Context, HomeAssistant, Stat
 import pytest
 from pytest_homeassistant_custom_component.common import async_mock_service
 
-from custom_components.yandex_smart_home.backports import LockState
+from custom_components.yandex_smart_home.backports import LockState, VacuumActivity
 from custom_components.yandex_smart_home.capability_onoff import OnOffCapability
 from custom_components.yandex_smart_home.const import CONF_STATE_UNKNOWN, CONF_TURN_OFF, CONF_TURN_ON
 from custom_components.yandex_smart_home.helpers import ActionNotAllowed, APIError
@@ -386,7 +386,7 @@ async def test_capability_onoff_lock(hass: HomeAssistant, entry_data: MockConfig
 
 
 async def test_capability_onoff_vacuum(hass: HomeAssistant, entry_data: MockConfigEntryData) -> None:
-    for s in [STATE_ON, vacuum.STATE_CLEANING]:
+    for s in [STATE_ON, VacuumActivity.CLEANING]:
         state = State(
             "vacuum.test",
             s,
@@ -400,8 +400,8 @@ async def test_capability_onoff_vacuum(hass: HomeAssistant, entry_data: MockConf
         assert cap.retrievable is True
         assert cap.parameters is None
 
-    for s in vacuum.STATES + [STATE_OFF]:
-        if s == vacuum.STATE_CLEANING:
+    for s in list(VacuumActivity) + [STATE_OFF]:
+        if s == VacuumActivity.CLEANING:
             continue
         state = State(
             "vacuum.test",

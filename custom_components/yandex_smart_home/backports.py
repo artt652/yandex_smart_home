@@ -13,3 +13,14 @@ class LockState(StrEnum):
     UNLOCKING = "unlocking"
     LOCKED = "locked"
     UNLOCKED = "unlocked"
+
+
+class VacuumActivity(StrEnum):
+    """Vacuum activity states (2025.1+)."""
+
+    CLEANING = "cleaning"
+    DOCKED = "docked"
+    IDLE = "idle"
+    PAUSED = "paused"
+    RETURNING = "returning"
+    ERROR = "error"

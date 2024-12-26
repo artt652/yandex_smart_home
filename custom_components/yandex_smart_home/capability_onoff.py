@@ -45,7 +45,7 @@ from homeassistant.const import (
 from homeassistant.core import DOMAIN as HA_DOMAIN, Context
 from homeassistant.helpers.service import async_call_from_config
 
-from .backports import LockState
+from .backports import LockState, VacuumActivity
 from .capability import STATE_CAPABILITIES_REGISTRY, ActionOnlyCapabilityMixin, StateCapability
 from .const import (
     CONF_FEATURES,
@@ -398,7 +398,7 @@ class OnOffCapabilityVacuum(OnOffCapability):
 
     def get_value(self) -> bool | None:
         """Return the current capability value."""
-        return self.state.state in [STATE_ON, vacuum.STATE_CLEANING]
+        return self.state.state in [STATE_ON, VacuumActivity.CLEANING]
 
     async def _set_instance_state(self, context: Context, state: OnOffCapabilityInstanceActionState) -> None:
         """Change the capability state (if wasn't overriden by the user)."""
