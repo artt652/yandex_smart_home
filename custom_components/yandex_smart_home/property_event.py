@@ -438,9 +438,7 @@ class MotionEventPlatformProperty(EventPlatformProperty, MotionEventProperty):
     @property
     def parameters(self) -> MotionEventPropertyParameters:
         """Return parameters for a devices list request."""
-        return MotionEventPropertyParameters(
-            events=[{"value": MotionInstanceEvent.DETECTED}]  # type: ignore[dict-item]
-        )
+        return MotionEventPropertyParameters(events=[{"value": MotionInstanceEvent.DETECTED}])
 
     @property
     def supported(self) -> bool:

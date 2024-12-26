@@ -20,7 +20,6 @@ from homeassistant.const import (
     STATE_OFF,
     STATE_ON,
     STATE_OPEN,
-    STATE_PAUSED,
     STATE_PLAYING,
 )
 from homeassistant.core import Context, HomeAssistant, State
@@ -33,6 +32,7 @@ from custom_components.yandex_smart_home.schema import (
     ToggleCapabilityInstanceActionState,
 )
 from tests.test_capability_color import LightEntityFeature
+from tests.test_capability_onoff import VacuumActivity
 from tests.test_device import BacklightCapability
 
 from . import MockConfigEntryData
@@ -247,7 +247,7 @@ async def test_capability_pause_vacuum(hass: HomeAssistant, entry_data: MockConf
     state = State("vacuum.test", STATE_ON)
     assert_no_capabilities(hass, entry_data, state, CapabilityType.TOGGLE, ToggleCapabilityInstance.PAUSE)
 
-    for s in vacuum.STATES:
+    for s in VacuumActivity:
         state = State("vacuum.test", s, {ATTR_SUPPORTED_FEATURES: VacuumEntityFeature.PAUSE})
         cap = cast(
             ToggleCapability,
@@ -255,9 +255,9 @@ async def test_capability_pause_vacuum(hass: HomeAssistant, entry_data: MockConf
         )
         assert cap.retrievable is True
         assert cap.parameters.dict() == {"instance": "pause"}
-        assert cap.get_value() is False
+        assert cap.get_value() is (s == VacuumActivity.PAUSED)
 
-    state = State("vacuum.test", STATE_PAUSED, {ATTR_SUPPORTED_FEATURES: VacuumEntityFeature.PAUSE})
+    state = State("vacuum.test", VacuumActivity.PAUSED, {ATTR_SUPPORTED_FEATURES: VacuumEntityFeature.PAUSE})
     cap = cast(
         ToggleCapability,
         get_exact_one_capability(hass, entry_data, state, CapabilityType.TOGGLE, ToggleCapabilityInstance.PAUSE),

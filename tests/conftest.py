@@ -11,7 +11,7 @@ from homeassistant.components.demo.binary_sensor import DemoBinarySensor
 from homeassistant.components.demo.light import DemoLight
 from homeassistant.components.demo.sensor import DemoSensor
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
-from homeassistant.const import CONF_ID, CONF_PLATFORM, CONF_TOKEN, UnitOfTemperature
+from homeassistant.const import CONF_ID, CONF_PLATFORM, CONF_TOKEN, MAJOR_VERSION, MINOR_VERSION, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entityfilter
 import pytest
@@ -157,7 +157,10 @@ def hass_platform(hass: HomeAssistant) -> HomeAssistant:
     demo_light.hass = hass
     demo_light.entity_id = "light.kitchen"
     demo_light._attr_name = "Kitchen Light"  # type: ignore[assignment]
-    demo_light._ct = 240
+    if (int(MAJOR_VERSION), int(MINOR_VERSION)) >= (2025, 1):
+        demo_light._ct = 4200
+    else:
+        demo_light._ct = 240
 
     demo_sensor.async_write_ha_state()
     demo_binary_sensor.async_write_ha_state()

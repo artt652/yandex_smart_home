@@ -31,8 +31,6 @@ from homeassistant.const import (
     ATTR_SUPPORTED_FEATURES,
     CONF_ENTITY_ID,
     CONF_SERVICE,
-    MAJOR_VERSION,
-    MINOR_VERSION,
     SERVICE_CLOSE_COVER,
     SERVICE_CLOSE_VALVE,
     SERVICE_LOCK,
@@ -53,6 +51,7 @@ from homeassistant.core import DOMAIN as HA_DOMAIN, Context, HomeAssistant, Stat
 import pytest
 from pytest_homeassistant_custom_component.common import async_mock_service
 
+from custom_components.yandex_smart_home.backports import LockState, VacuumActivity
 from custom_components.yandex_smart_home.capability_onoff import OnOffCapability
 from custom_components.yandex_smart_home.const import CONF_STATE_UNKNOWN, CONF_TURN_OFF, CONF_TURN_ON
 from custom_components.yandex_smart_home.helpers import ActionNotAllowed, APIError
@@ -335,10 +334,7 @@ async def test_capability_onoff_media_player(hass: HomeAssistant, entry_data: Mo
 
 
 async def test_capability_onoff_lock(hass: HomeAssistant, entry_data: MockConfigEntryData) -> None:
-    if (int(MAJOR_VERSION), int(MINOR_VERSION)) >= (2024, 10):
-        state = State("lock.test", lock.LockState.UNLOCKED)
-    else:
-        state = State("lock.test", lock.STATE_UNLOCKED)  # pyright: ignore[reportAttributeAccessIssue]
+    state = State("lock.test", LockState.UNLOCKED)
     cap = cast(
         OnOffCapability,
         get_exact_one_capability(hass, entry_data, state, CapabilityType.ON_OFF, OnOffCapabilityInstance.ON),
@@ -358,12 +354,8 @@ async def test_capability_onoff_lock(hass: HomeAssistant, entry_data: MockConfig
     assert len(off_calls) == 1
     assert off_calls[0].data == {ATTR_ENTITY_ID: state.entity_id}
 
-    if (int(MAJOR_VERSION), int(MINOR_VERSION)) >= (2024, 10):
-        states = [lock.LockState.UNLOCKING, lock.LockState.LOCKING]
-        locked_state = lock.LockState.LOCKED
-    else:
-        states = [lock.STATE_UNLOCKING, lock.STATE_LOCKING]  # pyright: ignore[reportAttributeAccessIssue]
-        locked_state = lock.STATE_LOCKED  # pyright: ignore[reportAttributeAccessIssue]
+    states = [LockState.UNLOCKING, LockState.LOCKING]
+    locked_state = LockState.LOCKED
 
     for s in states:
         state_other = State("lock.test", s)
@@ -394,7 +386,7 @@ async def test_capability_onoff_lock(hass: HomeAssistant, entry_data: MockConfig
 
 
 async def test_capability_onoff_vacuum(hass: HomeAssistant, entry_data: MockConfigEntryData) -> None:
-    for s in [STATE_ON, vacuum.STATE_CLEANING]:
+    for s in [STATE_ON, VacuumActivity.CLEANING]:
         state = State(
             "vacuum.test",
             s,
@@ -408,8 +400,8 @@ async def test_capability_onoff_vacuum(hass: HomeAssistant, entry_data: MockConf
         assert cap.retrievable is True
         assert cap.parameters is None
 
-    for s in vacuum.STATES + [STATE_OFF]:
-        if s == vacuum.STATE_CLEANING:
+    for s in list(VacuumActivity) + [STATE_OFF]:
+        if s == VacuumActivity.CLEANING:
             continue
         state = State(
             "vacuum.test",
