@@ -746,8 +746,11 @@ async def test_device_query(hass: HomeAssistant, entry_data: MockConfigEntryData
 
     device = Device(hass, entry_data, state.entity_id, state)
 
-    with patch.object(Device, "get_capabilities", return_value=[cap_onoff, cap_pause]), patch.object(
-        Device, "get_properties", return_value=[prop_temp, prop_voltage, prop_humidity_custom, prop_button]
+    with (
+        patch.object(Device, "get_capabilities", return_value=[cap_onoff, cap_pause]),
+        patch.object(
+            Device, "get_properties", return_value=[prop_temp, prop_voltage, prop_humidity_custom, prop_button]
+        ),
     ):
         assert device.query().as_dict() == {
             "id": "switch.test",
@@ -762,8 +765,9 @@ async def test_device_query(hass: HomeAssistant, entry_data: MockConfigEntryData
             ],
         }
 
-        with patch.object(PauseCapability, "retrievable", PropertyMock(return_value=None)), patch.object(
-            TemperatureSensor, "retrievable", PropertyMock(return_value=False)
+        with (
+            patch.object(PauseCapability, "retrievable", PropertyMock(return_value=None)),
+            patch.object(TemperatureSensor, "retrievable", PropertyMock(return_value=False)),
         ):
             assert device.query().as_dict() == {
                 "id": "switch.test",
@@ -784,8 +788,9 @@ async def test_device_query(hass: HomeAssistant, entry_data: MockConfigEntryData
         }
 
     cap_pause.state.state = STATE_ON
-    with patch.object(Device, "get_capabilities", return_value=[cap_pause]), patch.object(
-        Device, "get_properties", return_value=[prop_temp]
+    with (
+        patch.object(Device, "get_capabilities", return_value=[cap_pause]),
+        patch.object(Device, "get_properties", return_value=[prop_temp]),
     ):
         assert device.query().as_dict() == {
             "id": "switch.test",
@@ -802,8 +807,9 @@ async def test_device_query(hass: HomeAssistant, entry_data: MockConfigEntryData
         cap_pause.state.state = STATE_UNAVAILABLE
         assert device.query().as_dict() == {"id": "switch.test", "error_code": "DEVICE_UNREACHABLE"}
 
-    with patch.object(Device, "get_capabilities", return_value=[cap_button]), patch.object(
-        Device, "get_properties", return_value=[prop_button]
+    with (
+        patch.object(Device, "get_capabilities", return_value=[cap_button]),
+        patch.object(Device, "get_properties", return_value=[prop_button]),
     ):
         assert device.query().as_dict() == {"id": "switch.test"}
 

@@ -209,7 +209,7 @@ async def test_capability_pause_light(hass: HomeAssistant, entry_data: MockConfi
                     ATTR_SUPPORTED_FEATURES: LightEntityFeature.EFFECT,
                     light.ATTR_EFFECT_LIST: ["Solid", "bar"],
                 },
-                **attributes
+                **attributes,
             ),
         )
         cap = cast(

@@ -739,7 +739,7 @@ async def test_capability_color_setting_temperature_k_rgb_white(
                 ATTR_COLOR_MODE: ColorMode.WHITE,
                 ATTR_BRIGHTNESS: 56,
             },
-            **attributes
+            **attributes,
         ),
     )
     cap_temp = _get_temperature_capability(hass, entry_data, state)

@@ -117,17 +117,23 @@ async def test_cloud_connect(
         assert "yandex_smart_home/" in session.ws.headers["User-Agent"]
         await hass.config_entries.async_unload(config_entry_cloud.entry_id)
 
-    with patch(
-        "custom_components.yandex_smart_home.cloud.CloudManager._try_reconnect", return_value=None
-    ) as mock_reconnect, patch.object(session, "ws_connect", side_effect=Exception()):
+    with (
+        patch(
+            "custom_components.yandex_smart_home.cloud.CloudManager._try_reconnect", return_value=None
+        ) as mock_reconnect,
+        patch.object(session, "ws_connect", side_effect=Exception()),
+    ):
         await async_setup_entry(hass, config_entry_cloud, session=session)
         mock_reconnect.assert_called_once()
         await hass.config_entries.async_unload(config_entry_cloud.entry_id)
 
     caplog.clear()
-    with patch(
-        "custom_components.yandex_smart_home.cloud.CloudManager._try_reconnect", return_value=None
-    ) as mock_reconnect, patch.object(session, "ws_connect", side_effect=TimeoutError()):
+    with (
+        patch(
+            "custom_components.yandex_smart_home.cloud.CloudManager._try_reconnect", return_value=None
+        ) as mock_reconnect,
+        patch.object(session, "ws_connect", side_effect=TimeoutError()),
+    ):
         await async_setup_entry(hass, config_entry_cloud, session=session)
         mock_reconnect.assert_called_once()
         assert caplog.messages[-1] == "Failed to connect to Yandex Smart Home cloud"
