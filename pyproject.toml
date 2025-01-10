@@ -1,10 +1,10 @@
 #:schema https://json.schemastore.org/any.json
-[tool.poetry]
+[project]
 name = "yandex_smart_home"
-package-mode = false
+requires-python = ">=3.12,<3.14"
 
-[tool.poetry.dependencies]
-python = ">=3.12,<3.14"
+[tool.poetry]
+package-mode = false
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
