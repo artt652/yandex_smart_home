@@ -190,9 +190,12 @@ async def test_capability_video_stream_cloud(
     )
     stream = MockStream(hass)
 
-    with patch.object(cap, "_async_request_stream", return_value=stream), patch(
-        "custom_components.yandex_smart_home.cloud_stream.CloudStreamManager.async_start"
-    ) as mock_start_cloud_stream:
+    with (
+        patch.object(cap, "_async_request_stream", return_value=stream),
+        patch(
+            "custom_components.yandex_smart_home.cloud_stream.CloudStreamManager.async_start"
+        ) as mock_start_cloud_stream,
+    ):
         with pytest.raises(APIError) as e:
             await cap.set_instance_state(Context(), ACTION_STATE)
         assert e.value.code == ResponseCode.NOT_SUPPORTED_IN_CURRENT_MODE

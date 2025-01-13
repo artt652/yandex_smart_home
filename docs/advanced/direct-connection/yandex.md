@@ -79,13 +79,14 @@ title: Прямое подключение (УДЯ)
 2. Если сертификат настраивался вручную: убедитесь, что используется fullchain сертификат
    (в случае штатного аддона Let's Encrypt он в файле fullchain.cer):
 
-  ```yaml
-  http:
-    ssl_certificate: /config/acme.sh/YOUR_HA_DOMAIN/fullchain.cer
-    ssl_key: /config/acme.sh/YOUR_HA_DOMAIN/YOUR_HA_DOMAIN.key
-  ```
+    ```yaml
+    http:
+      ssl_certificate: /config/acme.sh/YOUR_HA_DOMAIN/fullchain.cer
+      ssl_key: /config/acme.sh/YOUR_HA_DOMAIN/YOUR_HA_DOMAIN.key
+    ```
 
-  Корректность установки сертификата можно проверить через [этот](https://www.sslshopper.com/ssl-checker.html) сервис.
+    Корректность установки сертификата можно проверить через [этот](https://www.sslshopper.com/ssl-checker.html) сервис.
+
 3. Если DNS запись добавлялась вручную: убедитесь, что у используемого домена нет AAAA записи (должна быть только A).
 
 ### Появляются дубли устройств { id=dups }
