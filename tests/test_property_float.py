@@ -31,13 +31,37 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant, State
 import pytest
 
-from custom_components.yandex_smart_home.helpers import APIError
 from custom_components.yandex_smart_home.property_float import PropertyType
-from custom_components.yandex_smart_home.schema import FloatPropertyInstance, ResponseCode
+from custom_components.yandex_smart_home.schema import FloatPropertyInstance
 from custom_components.yandex_smart_home.unit_conversion import UnitOfPressure
 from tests import MockConfigEntryData
 
 from .test_property import assert_no_properties, get_exact_one_property
+
+
+async def test_property_float_unsupported_unit_of_measurement(
+    hass: HomeAssistant, entry_data: MockConfigEntryData, caplog: pytest.LogCaptureFixture
+) -> None:
+    state = State(
+        "sensor.test",
+        "34.756",
+        {
+            ATTR_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
+            ATTR_UNIT_OF_MEASUREMENT: "foo",
+        },
+    )
+    prop = get_exact_one_property(hass, entry_data, state, PropertyType.FLOAT, FloatPropertyInstance.TEMPERATURE)
+
+    assert prop.retrievable is True
+    assert prop.parameters == {"instance": "temperature", "unit": "unit.temperature.celsius"}
+    assert prop.get_value() == 34.76
+
+    assert len(caplog.records) == 1
+    for record in caplog.records:
+        assert (
+            record.message
+            == "Unsupported unit of measurement 'foo' for instance temperature of float property of sensor.test. Valid units are: K, °C, °F"
+        )
 
 
 @pytest.mark.parametrize(
@@ -212,26 +236,6 @@ async def test_property_float_temperature_convertion(hass: HomeAssistant, entry_
     assert prop.retrievable is True
     assert prop.parameters == {"instance": "temperature", "unit": "unit.temperature.celsius"}
     assert prop.get_value() == 10.06
-
-    state = State(
-        "sensor.test",
-        "50.10",
-        {
-            ATTR_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
-            ATTR_UNIT_OF_MEASUREMENT: "foo",
-        },
-    )
-    prop = get_exact_one_property(hass, entry_data, state, PropertyType.FLOAT, FloatPropertyInstance.TEMPERATURE)
-
-    assert prop.retrievable is True
-    assert prop.parameters == {"instance": "temperature", "unit": "unit.temperature.celsius"}
-    with pytest.raises(APIError) as e:
-        prop.get_value()
-    assert e.value.code == ResponseCode.INVALID_VALUE
-    assert e.value.message == (
-        "Failed to convert value from 'foo' to '°C' for instance temperature of float property of sensor.test: "
-        "foo is not a recognized temperature unit."
-    )
 
 
 @pytest.mark.parametrize("device_class", [SensorDeviceClass.PRESSURE, SensorDeviceClass.ATMOSPHERIC_PRESSURE])
