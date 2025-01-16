@@ -55,15 +55,6 @@ from homeassistant.helpers.area_registry import AreaEntry
 from homeassistant.helpers.entity_registry import RegistryEntry
 from homeassistant.helpers.template import Template
 
-from custom_components.yandex_smart_home.const import (
-    CONF_BACKLIGHT_ENTITY_ID,
-    CONF_ENTITY_CUSTOM_MODES,
-    CONF_ENTITY_CUSTOM_RANGES,
-    CONF_ENTITY_CUSTOM_TOGGLES,
-    CONF_ENTITY_PROPERTIES,
-    CONF_ERROR_CODE_TEMPLATE,
-)
-
 from . import (  # noqa: F401
     capability_color,
     capability_custom,
@@ -79,6 +70,14 @@ from . import (  # noqa: F401
 from .capability import STATE_CAPABILITIES_REGISTRY, Capability, DummyCapability, StateCapability
 from .capability_custom import get_custom_capability
 from .capability_toggle import BacklightCapability
+from .const import (
+    CONF_BACKLIGHT_ENTITY_ID,
+    CONF_ENTITY_CUSTOM_MODES,
+    CONF_ENTITY_CUSTOM_RANGES,
+    CONF_ENTITY_CUSTOM_TOGGLES,
+    CONF_ENTITY_PROPERTIES,
+    CONF_ERROR_CODE_TEMPLATE,
+)
 from .helpers import ActionNotAllowed, APIError, _get_registry_entries
 from .property import STATE_PROPERTIES_REGISTRY, Property, StateProperty
 from .property_custom import get_custom_property, get_event_platform_custom_property_type
