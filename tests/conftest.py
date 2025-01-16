@@ -119,7 +119,12 @@ def config_entry_cloud() -> MockConfigEntry:
 def entry_data(hass: HomeAssistant) -> MockConfigEntryData:
     return MockConfigEntryData(
         hass=hass,
-        entry=MockConfigEntry(domain=DOMAIN, version=ConfigFlowHandler.VERSION, data={}, options={}),
+        entry=MockConfigEntry(
+            domain=DOMAIN,
+            version=ConfigFlowHandler.VERSION,
+            data={},
+            options={CONF_FILTER_SOURCE: EntityFilterSource.YAML},
+        ),
         entity_filter=generate_entity_filter(include_entity_globs=["*"]),
     )
 

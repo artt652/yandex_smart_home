@@ -515,12 +515,11 @@ async def async_get_device_states(
     states: list[DeviceState] = []
 
     for device_id in device_ids:
-        device = Device(hass, entry_data, device_id, hass.states.get(device_id))
-        if not device.should_expose:
-            _LOGGER.warning(
-                f"State requested for unexposed entity {device.id}. Please either expose the entity via "
-                f"filters in component configuration or delete the device from Yandex."
-            )
+        state = hass.states.get(device_id)
+        device = Device(hass, entry_data, device_id, state)
+
+        if state and not device.should_expose:
+            entry_data.mark_entity_unexposed(state.entity_id)
 
         states.append(device.query())
 

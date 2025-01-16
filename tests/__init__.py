@@ -10,7 +10,7 @@ from homeassistant.helpers.storage import Store
 from homeassistant.helpers.typing import ConfigType
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.yandex_smart_home import DOMAIN
+from custom_components.yandex_smart_home import CONF_FILTER_SOURCE, DOMAIN, EntityFilterSource
 from custom_components.yandex_smart_home.config_flow import ConfigFlowHandler
 from custom_components.yandex_smart_home.entry_data import ConfigEntryData
 from custom_components.yandex_smart_home.helpers import STORE_CACHE_ATTRS, CacheStore
@@ -26,7 +26,12 @@ class MockConfigEntryData(ConfigEntryData):
         entity_filter: entityfilter.EntityFilter | None = None,
     ):
         if not entry:
-            entry = MockConfigEntry(domain=DOMAIN, version=ConfigFlowHandler.VERSION, data={}, options={})
+            entry = MockConfigEntry(
+                domain=DOMAIN,
+                version=ConfigFlowHandler.VERSION,
+                data={},
+                options={CONF_FILTER_SOURCE: EntityFilterSource.YAML},
+            )
 
         super().__init__(hass, entry, yaml_config, entity_config, entity_filter)
 
