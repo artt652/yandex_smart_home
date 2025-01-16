@@ -167,11 +167,9 @@ async def test_handler_devices_query(hass: HomeAssistant, caplog: pytest.LogCapt
             ],
         }
 
-    assert caplog.messages[-3:] == [
-        "State requested for unexposed entity switch.not_expose. Please either expose the entity via filters in "
-        "component configuration or delete the device from Yandex.",
-        "State requested for unexposed entity invalid.foo. Please either expose the entity via filters in component "
-        "configuration or delete the device from Yandex.",
+    assert caplog.messages[-2:] == [
+        "Device for switch.not_expose exists in Yandex, but entity switch.not_expose not exposed via integration settings. "
+        "Please either expose the entity or delete the device from Yandex.",
         "Missing capabilities and properties for sensor.test",
     ]
 
@@ -434,6 +432,8 @@ async def test_handler_devices_action(
             "(NOT_SUPPORTED_IN_CURRENT_MODE)",
             "Device switch.test_2 doesn't support instance controls_locked of toggle "
             "capability (NOT_SUPPORTED_IN_CURRENT_MODE)",
+            "Device for switch.test_3 exists in Yandex, but entity switch.test_3 not exposed via integration settings. "
+            "Please either expose the entity or delete the device from Yandex.",
         ]
 
 
@@ -608,7 +608,11 @@ async def test_handler_devices_action_error_template(hass: HomeAssistant, caplog
 
 
 async def test_handler_devices_action_not_allowed(hass: HomeAssistant, caplog: pytest.LogCaptureFixture) -> None:
-    entry_data = MockConfigEntryData(hass, entity_config={"switch.test": {"turn_on": False}})
+    entry_data = MockConfigEntryData(
+        hass,
+        entity_config={"switch.test": {"turn_on": False}},
+        entity_filter=generate_entity_filter(include_entity_globs=["switch.test"]),
+    )
     data = RequestData(entry_data, Context(), SmartHomePlatform.YANDEX, "test", REQ_ID)
 
     switch = State("switch.test", STATE_OFF)

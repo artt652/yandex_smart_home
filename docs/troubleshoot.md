@@ -46,9 +46,9 @@
 * Для прямого подключения: убедитесь, что Home Assistant доступен из интернета
 * Для облачного подключения: напишите в [чат](https://t.me/yandex_smart_home) в Telegram указав первые 6 символов вашего ID (можно посмотреть в [настройках интеграции](./config/getting-started.md#gui))
 
-## State requested for unexposed entity { id=unexposed-entity }
+## Device for XXX exists in Yandex, but entity XXX not exposed { id=unexposed-entity }
 
-В УДЯ присутствует устройство, но объект по которому оно создано не выбран в [объектах для передачи в УДЯ](./config/filter.md).
+В УДЯ присутствует устройство, но объект, по которому оно создано, не выбран в [объектах для передачи в УДЯ](./config/filter.md).
 
 Для исправления: удалите устройство из УДЯ или добавьте [объект](./faq.md#get-entity-id-app) в список устройств для передачи.
 

@@ -117,6 +117,10 @@ disable_error_code = [
     "func-returns-value",
 ]
 
+[[tool.mypy.overrides]]
+module = "tests.test_repairs"
+disallow_any_generics = false
+
 [tool.tox]
 env_list = [
     "type",
