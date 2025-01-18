@@ -146,7 +146,7 @@ async def test_property_demo_platform(hass: HomeAssistant, entry_data: MockConfi
     state = hass.states.get("zone.home")
     assert state is not None
     device = Device(hass, entry_data, state.entity_id, state)
-    assert device.type is None
+    assert device.type == "devices.types.other"
     props = list((p.type, p.instance) for p in device.get_properties())
     assert props == []
 

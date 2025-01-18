@@ -276,9 +276,11 @@ async def test_handler_devices_action(
     switch_1 = State("switch.test_1", STATE_OFF)
     switch_2 = State("switch.test_2", STATE_OFF)
     switch_3 = State("switch.test_3", STATE_UNAVAILABLE)
+    switch_not_expose = State("switch.not_expose", STATE_OFF)
     hass.states.async_set(switch_1.entity_id, switch_1.state, switch_1.attributes)
     hass.states.async_set(switch_2.entity_id, switch_2.state, switch_2.attributes)
     hass.states.async_set(switch_3.entity_id, switch_3.state, switch_3.attributes)
+    hass.states.async_set(switch_not_expose.entity_id, switch_not_expose.state, switch_not_expose.attributes)
     device_action_event = Mock()
     hass.bus.async_listen(EVENT_DEVICE_ACTION, device_action_event)
 
@@ -322,6 +324,15 @@ async def test_handler_devices_action(
                         },
                         {
                             "id": switch_3.entity_id,
+                            "capabilities": [
+                                {
+                                    "type": MockCapabilityA.type,
+                                    "state": {"instance": MockCapabilityA.instance, "value": True},
+                                }
+                            ],
+                        },
+                        {
+                            "id": switch_not_expose.entity_id,
                             "capabilities": [
                                 {
                                     "type": MockCapabilityA.type,
@@ -392,13 +403,22 @@ async def test_handler_devices_action(
                     ],
                 },
                 {"id": "switch.test_3", "action_result": {"status": "ERROR", "error_code": "DEVICE_UNREACHABLE"}},
+                {
+                    "id": "switch.not_expose",
+                    "capabilities": [
+                        {
+                            "type": "devices.capabilities.toggle",
+                            "state": {"instance": "pause", "action_result": {"status": "DONE"}},
+                        },
+                    ],
+                },
                 {"id": "foo.not_exist", "action_result": {"status": "ERROR", "error_code": "DEVICE_UNREACHABLE"}},
             ]
         }
 
         await hass.async_block_till_done()
 
-        assert device_action_event.call_count == 7
+        assert device_action_event.call_count == 8
         args, _ = device_action_event.call_args_list[0]
         assert args[0].as_dict()["data"] == {
             "entity_id": "switch.test_1",
@@ -418,7 +438,7 @@ async def test_handler_devices_action(
             "error_code": "INTERNAL_ERROR",
         }
 
-        args, _ = device_action_event.call_args_list[6]
+        args, _ = device_action_event.call_args_list[7]
         assert args[0].as_dict()["data"] == {
             "entity_id": "foo.not_exist",
             "error_code": "DEVICE_UNREACHABLE",
@@ -432,7 +452,7 @@ async def test_handler_devices_action(
             "(NOT_SUPPORTED_IN_CURRENT_MODE)",
             "Device switch.test_2 doesn't support instance controls_locked of toggle "
             "capability (NOT_SUPPORTED_IN_CURRENT_MODE)",
-            "Device for switch.test_3 exists in Yandex, but entity switch.test_3 not exposed via integration settings. "
+            "Device for switch.not_expose exists in Yandex, but entity switch.not_expose not exposed via integration settings. "
             "Please either expose the entity or delete the device from Yandex.",
         ]
 

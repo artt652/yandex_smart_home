@@ -487,7 +487,7 @@ async def test_capability_demo_platform(hass: HomeAssistant, entry_data: MockCon
     state = hass.states.get("zone.home")
     assert state
     device = Device(hass, entry_data, state.entity_id, state)
-    assert device.type is None
+    assert device.type == "devices.types.other"
     capabilities = list((c.type, c.instance) for c in device.get_capabilities())
     assert capabilities == []
 
