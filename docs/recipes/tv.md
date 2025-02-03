@@ -75,7 +75,7 @@ script:
                     command: "adb shell am start -a android.intent.action.VIEW -d content://android.media.tv/passthrough/com.tcl.tvinput%2F.passthroughinput.TvPassThroughService%2FHW1413744640"
           - conditions:
               - condition: template
-                value_template: "{{ input_source == 'HW4 }}"
+                value_template: "{{ input_source == 'HW4' }}"
             sequence:
               - action: androidtv.adb_command
                 target:
@@ -102,7 +102,7 @@ script:
                   source: ru.kinopoisk.tv
           - conditions:
               - condition: template
-                value_template: "{{ input_source == 'com.google.android.tvlauncher'' }}"
+                value_template: "{{ input_source == 'com.google.android.tvlauncher' }}"
             sequence:
               - action: androidtv.adb_command
                 target:
