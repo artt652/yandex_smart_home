@@ -111,6 +111,7 @@ class XiaomiFanMode(StrEnum):
     STRONG = "Strong"
     FAN = "Fan"
     NATURE = "Nature"
+    SLEEP = "Sleep"
 
 
 class XiaomiMiotFanMode(StrEnum):
@@ -524,6 +525,7 @@ class ProgramCapabilityFan(ProgramCapability):
         ModeCapabilityMode.QUIET: [
             XiaomiFanMode.SILENT,
             XiaomiFanMode.NATURE,
+            XiaomiFanMode.SLEEP,
             XiaomiMiotFanMode.LEVEL_1,
         ],
         ModeCapabilityMode.LOW: [
@@ -733,6 +735,7 @@ class FanSpeedCapabilityFanViaPreset(FanSpeedCapability):
         ModeCapabilityMode.QUIET: [
             climate.FAN_OFF,
             XiaomiFanMode.SILENT,
+            XiaomiFanMode.SLEEP,
             XiaomiMiotFanMode.LEVEL_1,
         ],
         ModeCapabilityMode.LOW: [
