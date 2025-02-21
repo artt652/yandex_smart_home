@@ -48,7 +48,7 @@ script:
       - choose:
           - conditions:
               - condition: template
-                value_template: "{{ input_source == 'HW1 }}"
+                value_template: "{{ input_source == 'HW1' }}"
             sequence:
               - action: androidtv.adb_command
                 target:
