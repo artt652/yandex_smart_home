@@ -37,6 +37,7 @@ class DeviceType(StrEnum):
     SWITCH_RELAY = "devices.types.switch.relay"
     THERMOSTAT = "devices.types.thermostat"
     THERMOSTAT_AC = "devices.types.thermostat.ac"
+    THERMOSTAT_HEATER = "devices.types.thermostat.heater"
     MEDIA_DEVICE = "devices.types.media_device"
     MEDIA_DEVICE_TV = "devices.types.media_device.tv"
     MEDIA_DEVICE_TV_BOX = "devices.types.media_device.tv_box"

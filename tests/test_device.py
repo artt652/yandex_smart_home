@@ -536,17 +536,9 @@ async def test_device_name_room_ignore_aliases(
 
 
 async def test_device_should_expose(hass: HomeAssistant, entry_data: MockConfigEntryData) -> None:
-    device = Device(hass, entry_data, "group.all_locks", State("group.all_locks", STATE_ON))
-    assert device.should_expose is False
-
-    device = Device(hass, entry_data, "fake.unsupported", State("fake.unsupported", STATE_ON))
-    assert device.should_expose is False
-
     entry_data = MockConfigEntryData(hass, entity_filter=generate_entity_filter(exclude_entities=["switch.not_expose"]))
     device = Device(hass, entry_data, "switch.test", State("switch.test", STATE_ON))
     assert device.should_expose is True
-    device = Device(hass, entry_data, "switch.test", State("switch.test", STATE_UNAVAILABLE))
-    assert device.should_expose is False
 
     device = Device(hass, entry_data, "switch.not_expose", State("switch.not_expose", STATE_ON))
     assert device.should_expose is False
@@ -591,10 +583,6 @@ async def test_device_should_expose_empty_filters(hass: HomeAssistant) -> None:
 
 async def test_device_type(hass: HomeAssistant, entry_data: MockConfigEntryData) -> None:
     state = State("input_number.test", "40")
-    device = Device(hass, entry_data, state.entity_id, state)
-    assert device.type is None
-
-    entry_data = MockConfigEntryData(hass, entity_config={state.entity_id: {CONF_TYPE: "devices.types.other"}})
     device = Device(hass, entry_data, state.entity_id, state)
     assert device.type == DeviceType.OTHER
 

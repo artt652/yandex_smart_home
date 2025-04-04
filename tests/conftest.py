@@ -125,7 +125,7 @@ def entry_data(hass: HomeAssistant) -> MockConfigEntryData:
             data={},
             options={CONF_FILTER_SOURCE: EntityFilterSource.YAML},
         ),
-        entity_filter=generate_entity_filter(include_entity_globs=["*"]),
+        entity_filter=generate_entity_filter(include_entity_globs=["*"], exclude_entities=["switch.not_expose"]),
     )
 
 
