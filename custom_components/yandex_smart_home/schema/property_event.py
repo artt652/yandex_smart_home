@@ -86,7 +86,7 @@ class BatteryLevelInstanceEvent(EventInstanceEvent):
 
     LOW = "low"
     NORMAL = "normal"
-    HIGH = "high"
+    
 
 
 class FoodLevelInstanceEvent(EventInstanceEvent):
